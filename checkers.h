@@ -34,6 +34,7 @@ void print_row_border();
 void print_row_data(int);
 
 /* Game Progession Functions */
+void initialize_board();
 void prompt_move();
 void change_player();
 int get_and_check_move();
