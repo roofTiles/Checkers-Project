@@ -10,19 +10,16 @@ void main(){
   /* Starting the Game */
   initialize_board();
   color = RED;
-  
+  print_board();
+
   while (TRUE){
-    /* Printing Board */
-    
-    print_board();
 
     /* Prompting user for a valid move */
     
     prompt_move();
     move_validity = get_and_check_move();
-
     while (move_validity == INVALID_MOVE){
-      printf("INVALID MOVE. TRY AGAIN!!\n");
+      printf("INVALID MOVE.  TRY AGAIN!!\n");
       prompt_move();
       move_validity = get_and_check_move();
     }
@@ -34,6 +31,10 @@ void main(){
     /* Change Player after move made */
 
     change_player();
+    
+    /* Printing Board */
+    printf("\n");
+    print_board();
 
   }
 }
@@ -59,11 +60,11 @@ void initialize_board(){
 void prompt_move(){
   switch(color) {
       case RED:
-	printf("RED's move: ");
+	printf("RED's move:  ");
 	break;
 
       case WHITE:
-	printf("WHITE's move: ");
+	printf("WHITE's move:  ");
 	break;
   }
 }

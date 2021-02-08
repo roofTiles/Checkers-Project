@@ -6,9 +6,9 @@ void print_board(){
   /* Printing column numbers of board */
   
   int col, row;
-  printf("  ");
+  printf(" ");
   for (col = 0; col < BOARD_SIZE; col++){
-    printf(" %d  ", col); 
+    printf("  %d ", col); 
   }
   printf("\n");
 
@@ -19,6 +19,7 @@ void print_board(){
     print_row_data(row);
   }
   print_row_border();
+  printf("\n");
 }
 
 /* Creates border between rows of cells on board */
