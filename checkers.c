@@ -30,7 +30,7 @@ void main(){
 
     /* Change Player after move made */
 
-    change_player();
+    color = opposite_player(color);
     
     /* Printing Board */
     printf("\n");
@@ -62,7 +62,7 @@ void prompt_move(){
       case RED:
 	printf("RED's move:  ");
 	break;
-
+ 
       case WHITE:
 	printf("WHITE's move:  ");
 	break;
@@ -76,15 +76,15 @@ int get_and_check_move(){
 }
 
 
-void change_player(){
-  switch(color) {
+int opposite_player(int player){
+  switch(player) {
+      case RED_KING:
       case RED:
-	color = WHITE;
-	break;
+	return(WHITE);
 
+      case WHITE_KING:
       case WHITE:
-	color = RED;
-	break;
+	return(RED);
   }
   
 }

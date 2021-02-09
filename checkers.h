@@ -36,7 +36,7 @@ void print_row_data(int);
 /* Game Progession Functions */
 void initialize_board();
 void prompt_move();
-void change_player();
+int opposite_player(int);
 int get_and_check_move();
 void check_exit();
 
