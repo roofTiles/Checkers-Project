@@ -39,6 +39,9 @@ void main(){
   }
 }
 
+
+/* Game Progression Functions */
+
 void initialize_board(){
   int row, col, piece;
   for (row = 0; row < BOARD_SIZE; row++){
@@ -76,22 +79,60 @@ int get_and_check_move(){
 }
 
 
-int opposite_player(int player){
-  switch(player) {
-      case RED_KING:
-      case RED:
-	return(WHITE);
-
-      case WHITE_KING:
-      case WHITE:
-	return(RED);
-  }
-  
-}
-
 void check_exit(){
   if (x_from == 0 && y_from == 0 && x_to == 0 && y_to == 0){
     exit(1);
   }
+}
+
+
+/* General Checkers Helper Functions */
+
+int opposite_player(int piece){
+  switch(piece) {
+    case RED_KING:
+    case RED:
+      return(WHITE);
+
+    case WHITE_KING:
+    case WHITE:
+      return(RED);
+  }
+}
+
+
+int get_valid_direction(int piece){
+  // for kings check both directions
+  switch(piece) {
+    case RED_KING:
+    case WHITE_KING:
+    case RED:
+      return(1);
+
+    case WHITE:
+      return(-1);
+  }
+}
+
+
+
+int is_king(int piece){
+  switch(piece) {
+    case RED_KING:
+    case WHITE_KING:
+      return(TRUE);
+
+    case RED:
+    case WHITE:
+      return(FALSE);
+  }
+}
+
+int space_exists(int x, int y){
+  if ((x >= BOARD_SIZE) || (x <= -1) || (y >= BOARD_SIZE) || (y <= -1)){
+    return(FALSE);
+  }
+
+  return(TRUE);
 }
 

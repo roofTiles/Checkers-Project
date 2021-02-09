@@ -36,7 +36,6 @@ void print_row_data(int);
 /* Game Progession Functions */
 void initialize_board();
 void prompt_move();
-int opposite_player(int);
 int get_and_check_move();
 void check_exit();
 
@@ -44,5 +43,9 @@ void check_exit();
 int is_move_valid(int, int, int, int, int);
 int prelim_move_check(int, int, int, int, int);
 
-
+/* General Checkers Helper Functions */
+int opposite_player(int);
+int get_valid_direction(int);
+int is_king(int);
+int space_exists(int, int);
 

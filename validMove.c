@@ -29,33 +29,21 @@ int prelim_move_check(int color, int x_from, int y_from, int x_to, int y_to){
   /* is move in bounds? */
   
   // checks starting coordinate
-  if ((x_from >= BOARD_SIZE) || (x_from <= -1) || (y_from >= BOARD_SIZE) || (y_from <= -1)){
+  if (!space_exists(x_from, y_from)){
     return(INVALID_MOVE);
   }
 
   // checks terminating coordinate
-  if ((x_to >= BOARD_SIZE) || (x_to <= -1) || (y_to >= BOARD_SIZE) || (y_to <= -1)){
+  if (!space_exists(x_to, y_to)){
     return(INVALID_MOVE);
   }
 
-  /* does move handle player pieces */
+  /* does move go from player piece to empty spot */
   int piece;
   piece = the_board[y_from][x_from];
   
   // checking if player colors correspond with piece being moved
-  if (color == RED && piece == WHITE){
-    return(INVALID_MOVE);
-  }
-
-  if (color == RED && piece == WHITE_KING){
-    return(INVALID_MOVE);
-  }
-
-  if (color == WHITE && piece == RED){
-    return(INVALID_MOVE);
-  }
-
-  if (color == WHITE && piece == RED_KING){
+  if (opposite_player(piece) == color){
     return(INVALID_MOVE);
   }
 
@@ -64,7 +52,6 @@ int prelim_move_check(int color, int x_from, int y_from, int x_to, int y_to){
   }
 
   // checking if terminating spot is empty
-
   if (the_board[y_to][x_to] != EMPTY){
     return(INVALID_MOVE);
   }
@@ -84,19 +71,13 @@ int check_move(int color, int x_from, int y_from, int x_to, int y_to, int jump){
   
   int is_valid_step;
   if (!jump){
-    if (piece == RED){
-      is_valid_step = check_step(x_from, y_from, x_to, y_to, 1);
-    }
+    int dir;
+    dir = get_valid_direction(piece);
+    is_valid_step = check_step(x_from, y_from, x_to, y_to, dir);
 
-    if (piece == WHITE){
+    if (is_king(piece) && is_valid_step == FALSE){ // check other direction for king piece if first one not valid
+      dir = -dir;
       is_valid_step = check_step(x_from, y_from, x_to, y_to, -1);
-    }
-
-    if (piece == RED_KING || piece == WHITE_KING){ // check either directions for king pieces
-      is_valid_step = check_step(x_from, y_from, x_to, y_to, 1);
-      if (is_valid_step == INVALID_MOVE){
-	is_valid_step = check_step(x_from, y_from, x_to, y_to, -1);
-      }
     }
 
     if (is_valid_step == INVALID_MOVE){ return(INVALID_MOVE); }
