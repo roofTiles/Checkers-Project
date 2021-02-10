@@ -24,7 +24,9 @@ void main(){
       move_validity = get_and_check_move();
     }
 
-    // TODO: check if move is a jump
+    printf("\n %d \n", jump_exists(color)); // DELETE LATER FOR TESTING PURPOSES
+    fflush(stdout);
+    
     move_piece(color, x_from, y_from, x_to, y_to, FALSE); 
     // TODO: handling multiple jumps for a piece
 
@@ -97,6 +99,9 @@ int opposite_player(int piece){
     case WHITE_KING:
     case WHITE:
       return(RED);
+
+    case EMPTY:
+      return(EMPTY);
   }
 }
 

@@ -43,6 +43,10 @@ void check_exit();
 int is_move_valid(int, int, int, int, int);
 int prelim_move_check(int, int, int, int, int);
 
+/* Jump Validity Functions */
+int check_space_for_opposite_team(int, int, int);
+int check_diagonals(int, int, int);
+
 /* General Checkers Helper Functions */
 int opposite_player(int);
 int get_valid_direction(int);
