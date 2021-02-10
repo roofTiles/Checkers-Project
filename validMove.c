@@ -10,13 +10,11 @@ int is_move_valid(int color, int x_from, int y_from, int x_to, int y_to){
     return(INVALID_MOVE);
   }
 
-
-  // have to first determine if jumping move exists for color (jump_exists() uses is_jumper() for each color piece)
-  // check_move() which checks if a move is valid step or a valid jump
-  // if jump exists check_move must ensure move is a valid jump!
+  int jump;
+  jump = jump_exists(color);
   
   /* check move */
-  if (check_move(color, x_from, y_from, x_to, y_to, FALSE) == INVALID_MOVE){ // TODO: need to update jump to check if move is jump
+  if (check_move(color, x_from, y_from, x_to, y_to, jump) == INVALID_MOVE){ // TODO: need to update jump to check if move is jump
     return(INVALID_MOVE);
   }
   
@@ -28,26 +26,17 @@ int is_move_valid(int color, int x_from, int y_from, int x_to, int y_to){
 int prelim_move_check(int color, int x_from, int y_from, int x_to, int y_to){
   /* is move in bounds? */
   
-  // checks starting coordinate
-  if (!space_exists(x_from, y_from)){
+  // checks starting coordinate and terminating coordinates
+  if (!space_exists(x_from, y_from) || !space_exists(x_to, y_to)){
     return(INVALID_MOVE);
   }
 
-  // checks terminating coordinate
-  if (!space_exists(x_to, y_to)){
-    return(INVALID_MOVE);
-  }
-
-  /* does move go from player piece to empty spot */
+  /* does move go from player piece to empty spot? */
   int piece;
   piece = the_board[y_from][x_from];
   
   // checking if player colors correspond with piece being moved
-  if (opposite_player(piece) == color){
-    return(INVALID_MOVE);
-  }
-
-  if (piece == EMPTY){
+  if (opposite_player(piece) == color || piece == EMPTY){
     return(INVALID_MOVE);
   }
 
@@ -60,24 +49,35 @@ int prelim_move_check(int color, int x_from, int y_from, int x_to, int y_to){
 }
 
 int check_move(int color, int x_from, int y_from, int x_to, int y_to, int jump){
-  int piece;
+  int piece, dir;
   piece = the_board[y_from][x_from];
+  dir = get_valid_direction(piece);
+  
+  /* Checking if move is a valid jump */
   
   if (jump){
-    // check_jump here
+    int is_valid_jump;
+    
+    is_valid_jump = check_jump(x_from, y_from, x_to, y_to, dir);
+
+    if (is_king(piece) && is_valid_jump == INVALID_MOVE){ // check other direction for king piece if first one not valid
+      dir = -dir;
+      is_valid_jump = check_jump(x_from, y_from, x_to, y_to, dir);
+    }
+
+    if (is_valid_jump == INVALID_MOVE){ return(INVALID_MOVE); }
   }
 
   /* Checking if move is a valid step */
   
-  int is_valid_step;
   if (!jump){
-    int dir;
-    dir = get_valid_direction(piece);
+    int is_valid_step;
+    
     is_valid_step = check_step(x_from, y_from, x_to, y_to, dir);
 
-    if (is_king(piece) && is_valid_step == FALSE){ // check other direction for king piece if first one not valid
+    if (is_king(piece) && is_valid_step == INVALID_MOVE){ // check other direction for king piece if first one not valid
       dir = -dir;
-      is_valid_step = check_step(x_from, y_from, x_to, y_to, -1);
+      is_valid_step = check_step(x_from, y_from, x_to, y_to, dir);
     }
 
     if (is_valid_step == INVALID_MOVE){ return(INVALID_MOVE); }
@@ -86,12 +86,39 @@ int check_move(int color, int x_from, int y_from, int x_to, int y_to, int jump){
   return(VALID_MOVE);
 }
 
+/* If a move is a valid step */
+
 int check_step(int x_from, int y_from, int x_to, int y_to, int dir){
   if (abs(x_to - x_from) != 1){
     return(INVALID_MOVE);
   }
 
   if ((y_to - y_from) != dir){
+    return(INVALID_MOVE);
+  }
+
+  return(VALID_MOVE);
+}
+
+/* If a move is a valid jump */
+
+int check_jump(int x_from, int y_from, int x_to, int y_to, int dir){
+  int piece;
+  piece = the_board[y_from][x_from];
+
+  if (is_jumper(x_from, y_from) == FALSE){ // if piece selected cannot jump
+    return(INVALID_MOVE);
+  }
+
+  if (abs(x_to - x_from) != 2 || y_to - y_from != dir*2){ // if jump isn't diagonally two spaces away in correct direction
+    return(INVALID_MOVE);
+  }
+
+  if (x_from < x_to && check_space_for_opposite_team(x_from+1, y_from+dir, piece) == FALSE){ // if move is to the right
+    return(INVALID_MOVE);
+  }
+
+  if (x_from > x_to && check_space_for_opposite_team(x_from-1, y_from+dir, piece) == FALSE){ // if move is to the left
     return(INVALID_MOVE);
   }
 

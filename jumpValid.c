@@ -59,7 +59,7 @@ int check_diagonals(int x, int y, int dir){
 int check_space_for_opposite_team(int x, int y, int piece){
   int oppositeColor;
   oppositeColor = opposite_player(the_board[y][x]);
-  if (oppositeColor != EMPTY && oppositeColor != opposite_player(piece)){
+  if (oppositeColor != EMPTY && oppositeColor != opposite_player(piece)){ // if given space has piece of opposite player
     return(TRUE);
   }
   return(FALSE);

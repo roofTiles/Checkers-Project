@@ -3,7 +3,7 @@
 #include "checkers.h"
 
 int the_board[BOARD_SIZE][BOARD_SIZE];
-int color, x_from, y_from, x_to, y_to, move_validity;
+int color, x_from, y_from, x_to, y_to, move_validity, jump;
 
 void main(){
 
@@ -13,6 +13,8 @@ void main(){
   print_board();
 
   while (TRUE){
+
+    jump = FALSE;
 
     /* Prompting user for a valid move */
     
@@ -24,10 +26,12 @@ void main(){
       move_validity = get_and_check_move();
     }
 
-    printf("\n %d \n", jump_exists(color)); // DELETE LATER FOR TESTING PURPOSES
-    fflush(stdout);
+    //printf("\n %d \n", jump_exists(color)); // DELETE LATER FOR TESTING PURPOSES
+    //fflush(stdout);
+
+    jump = jump_exists(color);
     
-    move_piece(color, x_from, y_from, x_to, y_to, FALSE); 
+    move_piece(color, x_from, y_from, x_to, y_to, jump); 
     // TODO: handling multiple jumps for a piece
 
     /* Change Player after move made */
