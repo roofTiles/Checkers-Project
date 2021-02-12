@@ -4,6 +4,7 @@
 
 int the_board[BOARD_SIZE][BOARD_SIZE];
 int color, x_from, y_from, x_to, y_to, move_validity, jump;
+int multijump, prev_x, prev_y;
 
 void main(){
 
@@ -11,6 +12,7 @@ void main(){
   initialize_board();
   color = RED;
   print_board();
+  multijump = FALSE;
 
   while (TRUE){
 
@@ -26,19 +28,22 @@ void main(){
       move_validity = get_and_check_move();
     }
 
-    //printf("\n %d \n", jump_exists(color)); // DELETE LATER FOR TESTING PURPOSES
-    //fflush(stdout);
-
-    jump = jump_exists(color);
-    
+    jump = is_jumper(x_from, y_from);
     move_piece(color, x_from, y_from, x_to, y_to, jump); 
-    // TODO: handling multiple jumps for a piece
 
-    /* Change Player after move made */
+    /* Check if a multijump move */
 
-    color = opposite_player(color);
+    if (jump && is_jumper(x_to, y_to)){
+      multijump = TRUE;
+      prev_x = x_to;
+      prev_y = y_to;
+    } else{
+      multijump = FALSE;
+      color = opposite_player(color);
+    }
     
     /* Printing Board */
+    
     printf("\n");
     print_board();
 
@@ -78,12 +83,27 @@ void prompt_move(){
   }
 }
 
+// Prompt and checks if move is valid
+
 int get_and_check_move(){
   scanf("%d %d %d %d", &x_from, &y_from, &x_to, &y_to);
   check_exit();
+  if (multijump && !check_multijump(x_from, y_from)){
+    return(INVALID_MOVE);
+  }
   return(is_move_valid(color, x_from, y_from, x_to, y_to));
 }
 
+// Checks if a move is a multijump
+
+int check_multijump(int x_from, int y_from){
+  if (x_from == prev_x && y_from == prev_y){
+    return(TRUE);
+  }
+  return(FALSE);
+}
+
+// Checks if an input is to exit program
 
 void check_exit(){
   if (x_from == 0 && y_from == 0 && x_to == 0 && y_to == 0){

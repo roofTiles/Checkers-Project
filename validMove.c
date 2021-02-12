@@ -14,11 +14,9 @@ int is_move_valid(int color, int x_from, int y_from, int x_to, int y_to){
   jump = jump_exists(color);
   
   /* check move */
-  if (check_move(color, x_from, y_from, x_to, y_to, jump) == INVALID_MOVE){ // TODO: need to update jump to check if move is jump
+  if (check_move(color, x_from, y_from, x_to, y_to, jump) == INVALID_MOVE){
     return(INVALID_MOVE);
   }
-  
-
 
   return(VALID_MOVE);
 }

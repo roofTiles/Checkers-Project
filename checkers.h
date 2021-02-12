@@ -37,6 +37,7 @@ void print_row_data(int);
 void initialize_board();
 void prompt_move();
 int get_and_check_move();
+int check_multijump(int, int);
 void check_exit();
 
 /* Move Validity Functions */
