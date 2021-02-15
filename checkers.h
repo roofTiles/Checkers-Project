@@ -21,7 +21,7 @@ extern int the_board[BOARD_SIZE][BOARD_SIZE];
 
 
 /* Required Functions */
-void print_board(); //DONE
+void print_board();
 int jump_exists(int);
 void move_piece(int, int, int, int, int, int);
 int check_move(int, int, int, int, int, int);
